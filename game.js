@@ -51,6 +51,295 @@ let state = {
     activePowerup: null,    // {type, player} currently active
 };
 
+// ============ NAIL SHOP SYSTEM ============
+const NAIL_TYPES = [
+    {
+        id: 'iron', name: 'Demir Çivi', price: 0, rarity: 'common',
+        desc: 'Standart demir çivi. Güvenilir ve sağlam.',
+        color: { head: '#999', shaft: '#888', tip: '#666', shine: 'rgba(255,255,255,0.2)' },
+        stats: { saplama: 40, menzil: 50, isabet: 50, hiz: 50, ozel: 0 },
+        bonuses: {}
+    },
+    {
+        id: 'bronze', name: 'Bronz Çivi', price: 100, rarity: 'common',
+        desc: 'Bronz alaşımlı çivi. Sert zeminlerde daha iyi tutar.',
+        color: { head: '#cd7f32', shaft: '#b87333', tip: '#8c5e2a', shine: 'rgba(255,220,150,0.3)' },
+        stats: { saplama: 55, menzil: 50, isabet: 50, hiz: 50, ozel: 15 },
+        bonuses: { hardBonus: 0.15 }
+    },
+    {
+        id: 'steel', name: 'Çelik Çivi', price: 250, rarity: 'uncommon',
+        desc: 'Yüksek karbonlu çelik. Tüm zeminlerde güçlü.',
+        color: { head: '#c0c0c0', shaft: '#a8a8a8', tip: '#808080', shine: 'rgba(255,255,255,0.35)' },
+        stats: { saplama: 65, menzil: 55, isabet: 50, hiz: 50, ozel: 25 },
+        bonuses: { allGroundBonus: 0.15 }
+    },
+    {
+        id: 'gold', name: 'Altın Çivi', price: 500, rarity: 'rare',
+        desc: 'Saf altın kaplama. Daha uzağa fırlatılabilir.',
+        color: { head: '#ffd700', shaft: '#daa520', tip: '#b8860b', shine: 'rgba(255,255,200,0.4)' },
+        stats: { saplama: 50, menzil: 75, isabet: 50, hiz: 50, ozel: 30 },
+        bonuses: { rangeBonus: 0.25 }
+    },
+    {
+        id: 'ruby', name: 'Yakut Çivi', price: 400, rarity: 'rare',
+        desc: 'Yakut kristalli uç. Güç barı daha yavaş döner.',
+        color: { head: '#e0115f', shaft: '#c41e3a', tip: '#8b0000', shine: 'rgba(255,100,100,0.3)' },
+        stats: { saplama: 50, menzil: 50, isabet: 50, hiz: 70, ozel: 25 },
+        bonuses: { powerSlowdown: 0.20 }
+    },
+    {
+        id: 'emerald', name: 'Zümrüt Çivi', price: 400, rarity: 'rare',
+        desc: 'Zümrüt kaplamalı. İsabet halkası daha yavaş.',
+        color: { head: '#50c878', shaft: '#3cb371', tip: '#228b22', shine: 'rgba(100,255,150,0.3)' },
+        stats: { saplama: 50, menzil: 50, isabet: 75, hiz: 50, ozel: 25 },
+        bonuses: { accuracySlowdown: 0.25 }
+    },
+    {
+        id: 'sapphire', name: 'Safir Çivi', price: 400, rarity: 'rare',
+        desc: 'Safir taşlı. Daha güçlü saplama ve alan bonusu.',
+        color: { head: '#0f52ba', shaft: '#1a3c7a', tip: '#0a2351', shine: 'rgba(100,150,255,0.3)' },
+        stats: { saplama: 65, menzil: 60, isabet: 50, hiz: 50, ozel: 30 },
+        bonuses: { powerBonus: 0.20 }
+    },
+    {
+        id: 'diamond', name: 'Elmas Çivi', price: 1000, rarity: 'legendary',
+        desc: 'Efsanevi elmas çivi. Her zeminde neredeyse kesin saplanır!',
+        color: { head: '#b9f2ff', shaft: '#87ceeb', tip: '#4fc3f7', shine: 'rgba(200,240,255,0.5)' },
+        stats: { saplama: 95, menzil: 60, isabet: 60, hiz: 55, ozel: 90 },
+        bonuses: { allGroundBonus: 0.50 }
+    },
+    {
+        id: 'rockdriller', name: 'Kaya Delici', price: 750, rarity: 'epic',
+        desc: 'Tungsten uçlu. Kayalık zeminde bile saplanır!',
+        color: { head: '#ff6600', shaft: '#cc5500', tip: '#333', shine: 'rgba(255,150,50,0.3)' },
+        stats: { saplama: 70, menzil: 50, isabet: 45, hiz: 45, ozel: 80 },
+        bonuses: { rockyBonus: 0.50 }
+    },
+    {
+        id: 'ghost', name: 'Hayalet Çivi', price: 800, rarity: 'epic',
+        desc: 'Gizemli çivi. Engelleri 1 kez geçebilir!',
+        color: { head: 'rgba(180,130,255,0.7)', shaft: 'rgba(150,100,220,0.6)', tip: 'rgba(120,80,200,0.5)', shine: 'rgba(200,160,255,0.4)' },
+        stats: { saplama: 50, menzil: 55, isabet: 55, hiz: 60, ozel: 70 },
+        bonuses: { pierceObstacle: true }
+    },
+    {
+        id: 'magnetic', name: 'Manyetik Çivi', price: 600, rarity: 'epic',
+        desc: 'Mıknatıslı uç. Hedefe doğru çekilir!',
+        color: { head: '#00bfff', shaft: '#0099cc', tip: '#006699', shine: 'rgba(0,200,255,0.4)' },
+        stats: { saplama: 50, menzil: 50, isabet: 70, hiz: 50, ozel: 55 },
+        bonuses: { magnetPull: 0.15 }
+    },
+    {
+        id: 'titan', name: 'Titan Çivi', price: 1500, rarity: 'legendary',
+        desc: 'Titan alaşımlı efsanevi çivi. Tüm bonuslar artırılmış!',
+        color: { head: '#708090', shaft: '#5a6e7f', tip: '#3d4f5f', shine: 'rgba(180,200,220,0.4)' },
+        stats: { saplama: 70, menzil: 60, isabet: 60, hiz: 60, ozel: 60 },
+        bonuses: { allGroundBonus: 0.10, rangeBonus: 0.10, accuracySlowdown: 0.10, powerSlowdown: 0.10 }
+    }
+];
+
+// Shop state persisted in localStorage
+let shopState = {
+    gold: 200, // start with 200 gold
+    owned: ['iron'], // IDs of owned nails
+    equipped: 'iron', // currently equipped nail ID
+    selectedShopNail: null // currently selected in shop UI
+};
+
+function loadShopState() {
+    try {
+        const saved = localStorage.getItem('civiShopState');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            shopState.gold = parsed.gold ?? 200;
+            shopState.owned = parsed.owned ?? ['iron'];
+            shopState.equipped = parsed.equipped ?? 'iron';
+        }
+    } catch (e) { /* ignore */ }
+}
+
+function saveShopState() {
+    try {
+        localStorage.setItem('civiShopState', JSON.stringify({
+            gold: shopState.gold,
+            owned: shopState.owned,
+            equipped: shopState.equipped
+        }));
+    } catch (e) { /* ignore */ }
+}
+
+function getEquippedNail() {
+    return NAIL_TYPES.find(n => n.id === shopState.equipped) || NAIL_TYPES[0];
+}
+
+function addGold(amount) {
+    shopState.gold += amount;
+    saveShopState();
+    updateGoldDisplays();
+    // Show popup
+    if (amount > 0) {
+        const popup = document.createElement('div');
+        popup.className = 'gold-earned-popup';
+        popup.textContent = `+${amount} 🪙`;
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 1600);
+    }
+}
+
+function updateGoldDisplays() {
+    const menuGold = document.getElementById('menu-gold-amount');
+    const shopGold = document.getElementById('shop-gold-amount');
+    if (menuGold) menuGold.textContent = shopState.gold;
+    if (shopGold) shopGold.textContent = shopState.gold;
+}
+
+function getNailSVG(nailType, size) {
+    size = size || 32;
+    const c = nailType.color;
+    const uid = 'n' + nailType.id + Math.random().toString(36).substr(2, 4);
+    return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="32" cy="14" rx="14" ry="6" fill="${c.head}" stroke="rgba(0,0,0,0.3)" stroke-width="1"/>
+        <ellipse cx="32" cy="13" rx="11" ry="4" fill="${c.shine}" opacity="0.5"/>
+        <rect x="29" y="14" width="6" height="38" rx="1" fill="${c.shaft}" stroke="rgba(0,0,0,0.2)" stroke-width="0.5"/>
+        <rect x="30.5" y="16" width="2" height="34" rx="1" fill="${c.shine}"/>
+        <polygon points="29,52 35,52 32,62" fill="${c.tip}"/>
+    </svg>`;
+}
+
+// ============ SHOP UI ============
+function openShop() {
+    const menuScreen = document.getElementById('menu-screen');
+    const shopScreen = document.getElementById('shop-screen');
+    menuScreen.classList.remove('active');
+    shopScreen.classList.add('active');
+    shopState.selectedShopNail = null;
+    renderShopGrid();
+    renderShopDetail(null);
+    updateGoldDisplays();
+    updateEquippedDisplay();
+}
+
+function closeShop() {
+    const menuScreen = document.getElementById('menu-screen');
+    const shopScreen = document.getElementById('shop-screen');
+    shopScreen.classList.remove('active');
+    menuScreen.classList.add('active');
+    updateGoldDisplays();
+    updateEquippedDisplay();
+}
+
+function renderShopGrid() {
+    const grid = document.getElementById('nail-grid');
+    grid.innerHTML = '';
+    NAIL_TYPES.forEach(nail => {
+        const owned = shopState.owned.includes(nail.id);
+        const equipped = shopState.equipped === nail.id;
+        const selected = shopState.selectedShopNail === nail.id;
+        const card = document.createElement('div');
+        card.className = 'nail-card';
+        card.dataset.rarity = nail.rarity;
+        if (selected) card.classList.add('selected');
+        if (equipped) card.classList.add('equipped');
+        if (!owned && nail.price > 0) card.classList.add('locked');
+        card.innerHTML = `
+            <div class="nail-card-visual">${getNailSVG(nail, 32)}</div>
+            <div class="nail-card-name">${nail.name}</div>
+            <div class="nail-card-price ${nail.price === 0 ? 'free' : ''}">
+                ${nail.price === 0 ? 'Ücretsiz' : `🪙 ${nail.price}`}
+            </div>
+        `;
+        card.addEventListener('click', () => {
+            shopState.selectedShopNail = nail.id;
+            renderShopGrid();
+            renderShopDetail(nail);
+        });
+        grid.appendChild(card);
+    });
+}
+
+function renderShopDetail(nail) {
+    const preview = document.getElementById('detail-preview');
+    const name = document.getElementById('detail-name');
+    const desc = document.getElementById('detail-desc');
+    const stats = document.getElementById('detail-stats');
+    const actions = document.getElementById('detail-actions');
+
+    if (!nail) {
+        preview.innerHTML = '';
+        name.textContent = 'Çivi Seç';
+        desc.textContent = 'Bir çivi seçerek özelliklerini görün.';
+        stats.innerHTML = '';
+        actions.innerHTML = '';
+        return;
+    }
+
+    preview.innerHTML = getNailSVG(nail, 50);
+    name.textContent = nail.name;
+    name.style.color = nail.color.head;
+    desc.textContent = nail.desc;
+
+    const statDefs = [
+        { key: 'saplama', label: '⚡ Saplama', color: 'green' },
+        { key: 'menzil', label: '📏 Menzil', color: 'blue' },
+        { key: 'isabet', label: '🎯 İsabet', color: 'red' },
+        { key: 'hiz', label: '💨 Hız', color: 'gold' },
+        { key: 'ozel', label: '✨ Özel', color: 'purple' }
+    ];
+    stats.innerHTML = statDefs.map(s => `
+        <div class="stat-row">
+            <span class="stat-label">${s.label}</span>
+            <div class="stat-bar-wrap">
+                <div class="stat-bar ${s.color}" style="width:${nail.stats[s.key]}%"></div>
+            </div>
+        </div>
+    `).join('');
+
+    const owned = shopState.owned.includes(nail.id);
+    const equipped = shopState.equipped === nail.id;
+
+    if (equipped) {
+        actions.innerHTML = `<button class="btn-equip active" disabled>✓ Kuşanıldı</button>`;
+    } else if (owned) {
+        actions.innerHTML = `<button class="btn-equip" id="btn-equip-nail">Kuşan</button>`;
+        document.getElementById('btn-equip-nail').addEventListener('click', () => {
+            shopState.equipped = nail.id;
+            saveShopState();
+            renderShopGrid();
+            renderShopDetail(nail);
+            updateEquippedDisplay();
+        });
+    } else {
+        const canAfford = shopState.gold >= nail.price;
+        actions.innerHTML = `
+            <button class="btn-buy" id="btn-buy-nail" ${!canAfford ? 'disabled' : ''}>
+                🪙 ${nail.price} Satın Al
+            </button>
+        `;
+        if (canAfford) {
+            document.getElementById('btn-buy-nail').addEventListener('click', () => {
+                shopState.gold -= nail.price;
+                shopState.owned.push(nail.id);
+                shopState.equipped = nail.id;
+                saveShopState();
+                updateGoldDisplays();
+                renderShopGrid();
+                renderShopDetail(nail);
+                updateEquippedDisplay();
+            });
+        }
+    }
+}
+
+function updateEquippedDisplay() {
+    const el = document.getElementById('equipped-nail-name');
+    if (el) {
+        const nail = getEquippedNail();
+        el.textContent = nail.name;
+        el.style.color = nail.color.head;
+    }
+}
+
 // Cached background canvas
 let bgCanvas = null;
 let bgCtx = null;
@@ -644,6 +933,8 @@ function init() {
         });
     });
     $('btn-start').addEventListener('click', startGame);
+    $('btn-shop').addEventListener('click', openShop);
+    $('btn-shop-back').addEventListener('click', closeShop);
     canvas.addEventListener('click', handleClick);
     gameArea.addEventListener('mousemove', handleMouseMove);
     gameArea.addEventListener('mouseleave', () => { nailCursor.style.opacity = '0'; });
@@ -654,6 +945,10 @@ function init() {
     createMenuParticles();
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
+    // Load shop state
+    loadShopState();
+    updateGoldDisplays();
+    updateEquippedDisplay();
 
     // === ZOOM: Mouse wheel ===
     canvas.addEventListener('wheel', (e) => {
@@ -819,13 +1114,15 @@ function startThrow() {
     throwState.resultTimer = 0;
     state.totalTurns++;
 
-    // Difficulty ramp + combo bonuses
+    // Difficulty ramp + combo bonuses + nail bonuses
     const r = throwState.round;
     const diff = getDifficultyMultiplier();
     const combo = getComboBonus(state.currentPlayer);
+    const eqNail = getEquippedNail();
+    const enb = eqNail.bonuses;
     throwState.sweepSpeed = (2.2 + r * 0.12) * diff;
-    throwState.powerSpeed = (2.8 + r * 0.1) * diff;
-    throwState.accuracySpeed = (3.5 + r * 0.15) * diff * (1 - combo.accuracySlowdown);
+    throwState.powerSpeed = (2.8 + r * 0.1) * diff * (1 - (enb.powerSlowdown || 0));
+    throwState.accuracySpeed = (3.5 + r * 0.15) * diff * (1 - combo.accuracySlowdown) * (1 - (enb.accuracySlowdown || 0));
 
     // Start timer for this phase
     startTurnTimer();
@@ -872,7 +1169,8 @@ function handleClick(e) {
         const player = state.players[state.currentPlayer];
         const last = player.nails[player.nails.length - 1];
         const comboBonus = getComboBonus(state.currentPlayer);
-        const dist = (MIN_THROW_DIST + throwState.lockedPower * (MAX_THROW_DIST - MIN_THROW_DIST)) * comboBonus.rangeMultiplier;
+        const nailRangeBonus = 1 + (getEquippedNail().bonuses.rangeBonus || 0);
+        const dist = (MIN_THROW_DIST + throwState.lockedPower * (MAX_THROW_DIST - MIN_THROW_DIST)) * comboBonus.rangeMultiplier * nailRangeBonus;
         const wb = getWorldBounds();
         throwState.targetX = clamp(last.x + Math.cos(throwState.lockedDirection) * dist, wb.left, wb.right);
         throwState.targetY = clamp(last.y + Math.sin(throwState.lockedDirection) * dist, wb.top, wb.bottom);
@@ -934,11 +1232,14 @@ function landNail() {
 
     // Check ground hardness for nail failure
     const groundType = getGroundType(nail.x, nail.y);
+    const equippedNail = getEquippedNail();
+    const nb = equippedNail.bonuses;
     let failChance = NAIL_FAIL_CHANCE;
-    if (groundType === 'rocky') failChance = 0.80;
-    else if (groundType === 'hard') failChance = 0.60;
-    else if (groundType === 'soft') failChance = 0.08;
-    else failChance = 0.35;
+    if (groundType === 'rocky') failChance = 0.80 - (nb.rockyBonus || 0) - (nb.allGroundBonus || 0);
+    else if (groundType === 'hard') failChance = 0.60 - (nb.hardBonus || 0) - (nb.allGroundBonus || 0);
+    else if (groundType === 'soft') failChance = 0.08 - (nb.allGroundBonus || 0);
+    else failChance = 0.35 - (nb.allGroundBonus || 0);
+    failChance = Math.max(0.02, failChance); // minimum 2% fail chance
 
     if (Math.random() < failChance) {
         // NAIL FAILED TO STICK!
@@ -977,8 +1278,15 @@ function landNail() {
 
     const newLine = { from: last, to: nail };
 
+    // === NAIL MAGNETIC PULL bonus ===
+    if (nb.magnetPull) {
+        nail.x = throwState.targetX * nb.magnetPull + nail.x * (1 - nb.magnetPull);
+        nail.y = throwState.targetY * nb.magnetPull + nail.y * (1 - nb.magnetPull);
+    }
+
     // === OBSTACLE CHECK: line can't pass through obstacles ===
-    if (lineIntersectsObstacle(last.x, last.y, nail.x, nail.y)) {
+    const hitsObstacle = lineIntersectsObstacle(last.x, last.y, nail.x, nail.y);
+    if (hitsObstacle && !(nb.pierceObstacle)) {
         createImpactEffect(nail.x, nail.y, { main: '#888', glow: 'rgba(100,100,100,0.4)' });
         throwState.phase = 'idle';
         throwState.resultText = '🪨 ENGEL!';
@@ -992,6 +1300,9 @@ function landNail() {
             updateScoreBoard(); updateTurnIndicator(); startThrow();
         }, 1200);
         return;
+    }
+    if (hitsObstacle && nb.pierceObstacle) {
+        updateInstruction('👻 Hayalet çivi engeli geçti!');
     }
 
     // === SHIELD power-up: protect from line crossing ===
@@ -1070,6 +1381,17 @@ function landNail() {
 
     // === TURN STEAL: close to enemy nail = bonus turn message ===
     const stole = checkTurnSteal(nail.x, nail.y, state.currentPlayer);
+
+    // === EARN GOLD for successful nail (only human player) ===
+    if (!aiMode || state.currentPlayer !== AI_PLAYER_IDX) {
+        let goldEarned = 10; // base per nail
+        const combo = getCombo(state.currentPlayer);
+        if (combo >= 5) goldEarned += 50;
+        else if (combo >= 3) goldEarned += 30;
+        else if (combo >= 2) goldEarned += 20;
+        if (hitCritical) goldEarned += 25;
+        addGold(goldEarned);
+    }
 
     // Build success message
     throwState.phase = 'idle';
@@ -2323,6 +2645,17 @@ function showWinScreen(result) {
         desc = `Oyuncu ${result.loser + 1} başlangıç çizgisini kesti! ❌`;
     }
     winnerDesc.textContent = desc;
+
+    // === EARN GOLD for game result ===
+    if (aiMode) {
+        if (result.winner !== AI_PLAYER_IDX) {
+            addGold(200); // you won!
+        } else {
+            addGold(50); // you lost but still earn some
+        }
+    } else {
+        addGold(100); // local multiplayer reward
+    }
 
     const cc = $('confetti'); cc.innerHTML = '';
     const cols = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6', '#e67e22'];

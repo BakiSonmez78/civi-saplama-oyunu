@@ -64,6 +64,11 @@
     --transition-fast: 150ms ease;
     --transition-normal: 300ms ease;
     --transition-slow: 500ms ease;
+
+    /* Gold */
+    --gold: #f5c518;
+    --gold-dark: #c9a30a;
+    --gold-glow: rgba(245, 197, 24, 0.4);
 }
 
 /* ============================================
@@ -1082,6 +1087,33 @@ body {
     .trophy {
         font-size: 3rem;
     }
+
+    /* Shop tablet */
+    .shop-body {
+        flex-direction: column;
+    }
+
+    .nail-detail-panel {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: var(--space-sm);
+        padding: var(--space-md);
+    }
+
+    .detail-nail-preview {
+        width: 60px;
+        height: 60px;
+    }
+
+    .detail-nail-preview svg {
+        width: 36px;
+        height: 36px;
+    }
+
+    .nail-grid {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    }
 }
 
 /* Mobile phones */
@@ -1367,6 +1399,417 @@ body {
     .start-btn {
         padding: var(--space-sm);
     }
+}
+
+/* ============================================
+   GOLD DISPLAY & SHOP BUTTON
+   ============================================ */
+
+.gold-display {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    background: rgba(245, 197, 24, 0.1);
+    border: 1px solid rgba(245, 197, 24, 0.25);
+    border-radius: var(--radius-full);
+    padding: var(--space-xs) var(--space-md);
+    margin-top: var(--space-sm);
+}
+
+.gold-icon {
+    font-size: 1.1rem;
+}
+
+.gold-amount {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--gold);
+    min-width: 40px;
+}
+
+.shop-btn {
+    width: 100%;
+    padding: var(--space-sm) var(--space-xl);
+    background: linear-gradient(135deg, rgba(245,197,24,0.15), rgba(245,197,24,0.08));
+    border: 1px solid rgba(245, 197, 24, 0.3);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-family: var(--font);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    transition: all var(--transition-normal);
+}
+
+.shop-btn:hover {
+    background: linear-gradient(135deg, rgba(245,197,24,0.25), rgba(245,197,24,0.15));
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(245, 197, 24, 0.2);
+}
+
+/* ============================================
+   SHOP SCREEN
+   ============================================ */
+
+#shop-screen {
+    background: linear-gradient(160deg,
+            var(--bg-dark) 0%,
+            #1a1208 30%,
+            var(--bg-medium) 60%,
+            var(--mud-wet) 100%);
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.shop-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.shop-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--glass);
+    border-bottom: 1px solid var(--glass-border);
+    backdrop-filter: blur(15px);
+    z-index: 10;
+    min-height: 52px;
+    flex-shrink: 0;
+}
+
+.shop-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.shop-gold {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    background: rgba(245, 197, 24, 0.12);
+    border: 1px solid rgba(245, 197, 24, 0.25);
+    border-radius: var(--radius-full);
+    padding: var(--space-xs) var(--space-md);
+}
+
+.shop-body {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    gap: var(--space-md);
+    padding: var(--space-md);
+}
+
+.nail-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: var(--space-sm);
+    overflow-y: auto;
+    padding-right: var(--space-sm);
+    -webkit-overflow-scrolling: touch;
+}
+
+.nail-card {
+    background: var(--glass);
+    border: 1.5px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md) var(--space-sm);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+}
+
+.nail-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.nail-card.selected {
+    border-color: var(--gold);
+    background: rgba(245, 197, 24, 0.08);
+    box-shadow: 0 0 20px rgba(245, 197, 24, 0.15);
+}
+
+.nail-card.equipped {
+    border-color: #2ecc71;
+    box-shadow: 0 0 12px rgba(46, 204, 113, 0.2);
+}
+
+.nail-card.equipped::after {
+    content: '✓';
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    font-size: 0.7rem;
+    color: #2ecc71;
+    font-weight: 800;
+}
+
+.nail-card.locked {
+    opacity: 0.6;
+}
+
+.nail-card.locked::before {
+    content: '🔒';
+    position: absolute;
+    top: 4px;
+    left: 6px;
+    font-size: 0.65rem;
+}
+
+.nail-card-visual {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 2px;
+}
+
+.nail-card-visual svg {
+    width: 32px;
+    height: 32px;
+}
+
+.nail-card-name {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+    line-height: 1.2;
+}
+
+.nail-card-price {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.nail-card-price.free {
+    color: #2ecc71;
+}
+
+/* Rarity glows */
+.nail-card[data-rarity="common"] .nail-card-visual { background: rgba(140,140,140,0.15); }
+.nail-card[data-rarity="uncommon"] .nail-card-visual { background: rgba(46,204,113,0.12); }
+.nail-card[data-rarity="rare"] .nail-card-visual { background: rgba(52,152,219,0.12); }
+.nail-card[data-rarity="epic"] .nail-card-visual { background: rgba(155,89,182,0.15); }
+.nail-card[data-rarity="legendary"] .nail-card-visual { background: rgba(245,197,24,0.15); box-shadow: 0 0 15px rgba(245,197,24,0.1); }
+
+/* Detail Panel */
+.nail-detail-panel {
+    width: 280px;
+    flex-shrink: 0;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    backdrop-filter: blur(12px);
+    overflow-y: auto;
+}
+
+.detail-nail-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--glass-border);
+}
+
+.detail-nail-preview svg {
+    width: 50px;
+    height: 50px;
+}
+
+.detail-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.detail-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-align: center;
+    line-height: 1.4;
+}
+
+.detail-stats {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+}
+
+.stat-label {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.stat-bar-wrap {
+    width: 100px;
+    height: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.stat-bar {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width var(--transition-normal);
+}
+
+.stat-bar.green { background: linear-gradient(90deg, #2ecc71, #27ae60); }
+.stat-bar.blue { background: linear-gradient(90deg, #3498db, #2980b9); }
+.stat-bar.red { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+.stat-bar.gold { background: linear-gradient(90deg, #f5c518, #c9a30a); }
+.stat-bar.purple { background: linear-gradient(90deg, #9b59b6, #8e44ad); }
+
+.detail-actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+}
+
+.btn-buy {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-family: var(--font);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--bg-dark);
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+}
+
+.btn-buy:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px var(--gold-glow);
+}
+
+.btn-buy:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-equip {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-family: var(--font);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    transition: all var(--transition-fast);
+}
+
+.btn-equip:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(46,204,113,0.3);
+}
+
+.btn-equip.active {
+    background: rgba(46,204,113,0.2);
+    color: #2ecc71;
+    border: 1px solid #2ecc71;
+}
+
+.equipped-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--glass);
+    border-top: 1px solid var(--glass-border);
+    backdrop-filter: blur(15px);
+    flex-shrink: 0;
+}
+
+.equipped-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.equipped-nail {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #2ecc71;
+}
+
+/* Gold earned animation */
+@keyframes goldEarned {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-40px) scale(1.3); opacity: 0; }
+}
+
+.gold-earned-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--gold);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    pointer-events: none;
+    z-index: 9999;
+    animation: goldEarned 1.5s ease-out forwards;
 }
 
 /* ============================================
