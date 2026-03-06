@@ -1112,7 +1112,7 @@ body {
     }
 
     .nail-grid {
-        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
     }
 }
 
@@ -1514,11 +1514,13 @@ body {
 .nail-grid {
     flex: 1;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+    grid-auto-rows: min-content;
     gap: var(--space-sm);
     overflow-y: auto;
     padding-right: var(--space-sm);
     -webkit-overflow-scrolling: touch;
+    align-content: start;
 }
 
 .nail-card {
@@ -1686,8 +1688,8 @@ body {
 }
 
 .stat-bar-wrap {
-    width: 100px;
-    height: 6px;
+    width: 120px;
+    height: 7px;
     background: rgba(255,255,255,0.08);
     border-radius: var(--radius-full);
     overflow: hidden;
