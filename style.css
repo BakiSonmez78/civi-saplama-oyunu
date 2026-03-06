@@ -1579,19 +1579,94 @@ body {
 }
 
 .nail-card-visual {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     margin-bottom: 2px;
+    animation: nailFloat 3s ease-in-out infinite;
 }
 
 .nail-card-visual svg {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    transition: transform 0.4s ease;
+}
+
+.nail-card:hover .nail-card-visual svg {
+    transform: rotateY(180deg);
+}
+
+/* Floating animation */
+@keyframes nailFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+/* Epic pulse glow */
+@keyframes epicPulse {
+    0%, 100% { box-shadow: 0 0 8px rgba(155,89,182,0.2), 0 0 15px rgba(155,89,182,0.1); }
+    50% { box-shadow: 0 0 18px rgba(155,89,182,0.45), 0 0 30px rgba(155,89,182,0.2); }
+}
+
+/* Legendary rainbow shimmer */
+@keyframes legendaryShimmer {
+    0% { box-shadow: 0 0 12px rgba(255,0,0,0.3), 0 0 24px rgba(255,0,0,0.1); border-color: rgba(255,0,0,0.4); }
+    16% { box-shadow: 0 0 12px rgba(255,165,0,0.3), 0 0 24px rgba(255,165,0,0.1); border-color: rgba(255,165,0,0.4); }
+    33% { box-shadow: 0 0 12px rgba(255,255,0,0.3), 0 0 24px rgba(255,255,0,0.1); border-color: rgba(255,255,0,0.4); }
+    50% { box-shadow: 0 0 12px rgba(0,255,0,0.3), 0 0 24px rgba(0,255,0,0.1); border-color: rgba(0,255,0,0.4); }
+    66% { box-shadow: 0 0 12px rgba(0,100,255,0.3), 0 0 24px rgba(0,100,255,0.1); border-color: rgba(0,100,255,0.4); }
+    83% { box-shadow: 0 0 12px rgba(150,0,255,0.3), 0 0 24px rgba(150,0,255,0.1); border-color: rgba(150,0,255,0.4); }
+    100% { box-shadow: 0 0 12px rgba(255,0,0,0.3), 0 0 24px rgba(255,0,0,0.1); border-color: rgba(255,0,0,0.4); }
+}
+
+/* Legendary nail spin */
+@keyframes legendaryNailSpin {
+    0%, 100% { transform: translateY(0) rotateY(0deg); }
+    25% { transform: translateY(-7px) rotateY(90deg); }
+    50% { transform: translateY(0) rotateY(180deg); }
+    75% { transform: translateY(-7px) rotateY(270deg); }
+}
+
+/* Rarity visual styles */
+.nail-card[data-rarity="common"] .nail-card-visual {
+    background: rgba(140,140,140,0.12);
+}
+
+.nail-card[data-rarity="uncommon"] .nail-card-visual {
+    background: rgba(46,204,113,0.1);
+    border: 1px solid rgba(46,204,113,0.15);
+}
+
+.nail-card[data-rarity="rare"] .nail-card-visual {
+    background: rgba(52,152,219,0.1);
+    border: 1px solid rgba(52,152,219,0.2);
+    box-shadow: 0 0 10px rgba(52,152,219,0.1);
+}
+
+.nail-card[data-rarity="epic"] .nail-card-visual {
+    background: rgba(155,89,182,0.12);
+    border: 1px solid rgba(155,89,182,0.25);
+    animation: nailFloat 3s ease-in-out infinite, epicPulse 2s ease-in-out infinite;
+}
+
+.nail-card[data-rarity="legendary"] .nail-card-visual {
+    background: rgba(245,197,24,0.1);
+    border: 1.5px solid rgba(245,197,24,0.3);
+    animation: legendaryNailSpin 4s ease-in-out infinite, legendaryShimmer 3s linear infinite;
+}
+
+.nail-card[data-rarity="legendary"] {
+    border-color: rgba(245,197,24,0.3);
+    animation: legendaryShimmer 3s linear infinite;
+}
+
+.nail-card[data-rarity="epic"] {
+    border-color: rgba(155,89,182,0.3);
 }
 
 .nail-card-name {
@@ -1615,13 +1690,6 @@ body {
     color: #2ecc71;
 }
 
-/* Rarity glows */
-.nail-card[data-rarity="common"] .nail-card-visual { background: rgba(140,140,140,0.15); }
-.nail-card[data-rarity="uncommon"] .nail-card-visual { background: rgba(46,204,113,0.12); }
-.nail-card[data-rarity="rare"] .nail-card-visual { background: rgba(52,152,219,0.12); }
-.nail-card[data-rarity="epic"] .nail-card-visual { background: rgba(155,89,182,0.15); }
-.nail-card[data-rarity="legendary"] .nail-card-visual { background: rgba(245,197,24,0.15); box-shadow: 0 0 15px rgba(245,197,24,0.1); }
-
 /* Detail Panel */
 .nail-detail-panel {
     width: 280px;
@@ -1639,19 +1707,21 @@ body {
 }
 
 .detail-nail-preview {
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
     background: rgba(255,255,255,0.05);
     display: flex;
     align-items: center;
     justify-content: center;
     border: 2px solid var(--glass-border);
+    animation: nailFloat 2.5s ease-in-out infinite;
 }
 
 .detail-nail-preview svg {
-    width: 50px;
-    height: 50px;
+    width: 56px;
+    height: 56px;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
 }
 
 .detail-name {

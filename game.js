@@ -195,16 +195,191 @@ function updateGoldDisplays() {
 }
 
 function getNailSVG(nailType, size) {
-    size = size || 32;
+    size = size || 36;
     const c = nailType.color;
-    const uid = 'n' + nailType.id + Math.random().toString(36).substr(2, 4);
-    return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="32" cy="14" rx="14" ry="6" fill="${c.head}" stroke="rgba(0,0,0,0.3)" stroke-width="1"/>
-        <ellipse cx="32" cy="13" rx="11" ry="4" fill="${c.shine}" opacity="0.5"/>
-        <rect x="29" y="14" width="6" height="38" rx="1" fill="${c.shaft}" stroke="rgba(0,0,0,0.2)" stroke-width="0.5"/>
-        <rect x="30.5" y="16" width="2" height="34" rx="1" fill="${c.shine}"/>
-        <polygon points="29,52 35,52 32,62" fill="${c.tip}"/>
-    </svg>`;
+    const id = nailType.id;
+
+    // Unique detailed SVG for each nail type
+    const nails = {
+        iron: `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="32" cy="12" rx="15" ry="6.5" fill="#999" stroke="#666" stroke-width="0.8"/>
+            <ellipse cx="32" cy="11" rx="12" ry="4" fill="rgba(255,255,255,0.15)"/>
+            <circle cx="28" cy="11" r="1.5" fill="#777"/><circle cx="36" cy="11" r="1.5" fill="#777"/>
+            <rect x="29" y="12" width="6" height="40" rx="1" fill="url(#ironShaft${size})"/>
+            <rect x="31" y="14" width="1.5" height="36" rx="0.5" fill="rgba(255,255,255,0.15)"/>
+            <polygon points="29,52 35,52 32,62" fill="#666"/>
+            <defs><linearGradient id="ironShaft${size}" x1="29" y1="12" x2="35" y2="12">
+                <stop offset="0%" stop-color="#666"/><stop offset="40%" stop-color="#aaa"/><stop offset="60%" stop-color="#999"/><stop offset="100%" stop-color="#666"/>
+            </linearGradient></defs></svg>`,
+
+        bronze: `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="32" cy="12" rx="15" ry="7" fill="#cd7f32" stroke="#8c5e2a" stroke-width="0.8"/>
+            <ellipse cx="32" cy="10.5" rx="12" ry="4.5" fill="rgba(255,220,150,0.25)"/>
+            <line x1="26" y1="12" x2="38" y2="12" stroke="#8c5e2a" stroke-width="0.3"/>
+            <line x1="28" y1="10" x2="36" y2="14" stroke="#8c5e2a" stroke-width="0.3"/>
+            <rect x="28.5" y="12" width="7" height="39" rx="1.2" fill="url(#bronzeS${size})"/>
+            <rect x="31" y="14" width="1.8" height="35" rx="0.5" fill="rgba(255,220,150,0.2)"/>
+            <line x1="29" y1="22" x2="35" y2="22" stroke="rgba(139,94,42,0.4)" stroke-width="0.5"/>
+            <line x1="29" y1="32" x2="35" y2="32" stroke="rgba(139,94,42,0.4)" stroke-width="0.5"/>
+            <line x1="29" y1="42" x2="35" y2="42" stroke="rgba(139,94,42,0.4)" stroke-width="0.5"/>
+            <polygon points="28.5,51 35.5,51 32,62" fill="#8c5e2a"/>
+            <defs><linearGradient id="bronzeS${size}" x1="28" y1="12" x2="36" y2="12">
+                <stop offset="0%" stop-color="#8c5e2a"/><stop offset="35%" stop-color="#cd7f32"/><stop offset="65%" stop-color="#b87333"/><stop offset="100%" stop-color="#8c5e2a"/>
+            </linearGradient></defs></svg>`,
+
+        steel: `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="32" cy="11" rx="14" ry="6" fill="#c0c0c0" stroke="#808080" stroke-width="0.8"/>
+            <ellipse cx="32" cy="9.5" rx="11" ry="3.5" fill="rgba(255,255,255,0.3)"/>
+            <rect x="29" y="11" width="6" height="41" rx="0.8" fill="url(#steelS${size})"/>
+            <rect x="31.2" y="13" width="1.2" height="37" rx="0.5" fill="rgba(255,255,255,0.3)"/>
+            <rect x="28.5" y="20" width="7" height="2" rx="0.5" fill="rgba(128,128,128,0.4)"/>
+            <rect x="28.5" y="30" width="7" height="2" rx="0.5" fill="rgba(128,128,128,0.4)"/>
+            <rect x="28.5" y="40" width="7" height="2" rx="0.5" fill="rgba(128,128,128,0.4)"/>
+            <polygon points="29,52 35,52 32,63" fill="#808080"/>
+            <path d="M30 52 L32 60 L34 52" fill="rgba(255,255,255,0.15)"/>
+            <defs><linearGradient id="steelS${size}" x1="29" y1="11" x2="35" y2="11">
+                <stop offset="0%" stop-color="#808080"/><stop offset="30%" stop-color="#c0c0c0"/><stop offset="50%" stop-color="#ddd"/><stop offset="70%" stop-color="#b0b0b0"/><stop offset="100%" stop-color="#808080"/>
+            </linearGradient></defs></svg>`,
+
+        gold: `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="32" cy="11" rx="15" ry="7" fill="url(#goldH${size})" stroke="#b8860b" stroke-width="0.8"/>
+            <ellipse cx="32" cy="9.5" rx="12" ry="4.5" fill="rgba(255,255,200,0.35)"/>
+            <circle cx="32" cy="11" r="3" fill="none" stroke="#b8860b" stroke-width="0.5"/>
+            <rect x="28.5" y="11" width="7" height="40" rx="1" fill="url(#goldS${size})"/>
+            <rect x="31" y="13" width="2" height="36" rx="0.5" fill="rgba(255,255,200,0.3)"/>
+            <path d="M30 20 L32 18 L34 20 L32 22 Z" fill="rgba(255,215,0,0.4)"/>
+            <path d="M30 30 L32 28 L34 30 L32 32 Z" fill="rgba(255,215,0,0.4)"/>
+            <path d="M30 40 L32 38 L34 40 L32 42 Z" fill="rgba(255,215,0,0.4)"/>
+            <polygon points="28.5,51 35.5,51 32,63" fill="#b8860b"/>
+            <polygon points="30,51 34,51 32,60" fill="rgba(255,215,0,0.3)"/>
+            <defs><linearGradient id="goldH${size}" x1="17" y1="4" x2="47" y2="18">
+                <stop offset="0%" stop-color="#daa520"/><stop offset="40%" stop-color="#ffd700"/><stop offset="60%" stop-color="#ffed4a"/><stop offset="100%" stop-color="#daa520"/>
+            </linearGradient><linearGradient id="goldS${size}" x1="28" y1="11" x2="36" y2="11">
+                <stop offset="0%" stop-color="#b8860b"/><stop offset="35%" stop-color="#ffd700"/><stop offset="50%" stop-color="#ffed4a"/><stop offset="100%" stop-color="#b8860b"/>
+            </linearGradient></defs></svg>`,
+
+        ruby: `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="32" cy="12" rx="14" ry="6.5" fill="#c41e3a" stroke="#8b0000" stroke-width="0.8"/>
+            <ellipse cx="32" cy="10.5" rx="11" ry="4" fill="rgba(255,100,100,0.25)"/>
+            <rect x="29" y="12" width="6" height="38" rx="1" fill="url(#rubyS${size})"/>
+            <rect x="31" y="14" width="1.5" height="34" rx="0.5" fill="rgba(255,100,100,0.2)"/>
+            <polygon points="29,50 35,50 32,55" fill="#c41e3a"/>
+            <polygon points="30,55 34,55 32,63" fill="#e0115f" opacity="0.9"/>
+            <polygon points="31,56 33,56 32,61" fill="rgba(255,200,200,0.4)"/>
+            <circle cx="32" cy="58" r="1" fill="rgba(255,255,255,0.3)"/>
+            <defs><linearGradient id="rubyS${size}" x1="29" y1="12" x2="35" y2="12">
+                <stop offset="0%" stop-color="#8b0000"/><stop offset="40%" stop-color="#e0115f"/><stop offset="100%" stop-color="#8b0000"/>
+            </linearGradient></defs></svg>`,
+
+        emerald: `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="32" cy="12" rx="14" ry="6.5" fill="#3cb371" stroke="#228b22" stroke-width="0.8"/>
+            <ellipse cx="32" cy="10.5" rx="11" ry="4" fill="rgba(100,255,150,0.2)"/>
+            <rect x="29" y="12" width="6" height="38" rx="1" fill="url(#emS${size})"/>
+            <rect x="31" y="14" width="1.5" height="34" rx="0.5" fill="rgba(100,255,150,0.15)"/>
+            <polygon points="29,50 35,50 32,55" fill="#3cb371"/>
+            <rect x="30" y="55" width="4" height="6" fill="#50c878"/>
+            <polygon points="30,61 34,61 32,63" fill="#228b22"/>
+            <rect x="31" y="56" width="2" height="4" fill="rgba(255,255,255,0.25)"/>
+            <defs><linearGradient id="emS${size}" x1="29" y1="12" x2="35" y2="12">
+                <stop offset="0%" stop-color="#228b22"/><stop offset="40%" stop-color="#50c878"/><stop offset="100%" stop-color="#228b22"/>
+            </linearGradient></defs></svg>`,
+
+        sapphire: `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="32" cy="12" rx="14" ry="6.5" fill="#1a3c7a" stroke="#0a2351" stroke-width="0.8"/>
+            <ellipse cx="32" cy="10.5" rx="11" ry="4" fill="rgba(100,150,255,0.2)"/>
+            <rect x="29" y="12" width="6" height="38" rx="1" fill="url(#sapS${size})"/>
+            <rect x="31" y="14" width="1.5" height="34" rx="0.5" fill="rgba(100,150,255,0.15)"/>
+            <polygon points="29,50 35,50 32,55" fill="#1a3c7a"/>
+            <circle cx="32" cy="58" r="4" fill="#0f52ba"/>
+            <circle cx="32" cy="58" r="2.5" fill="#4169e1"/>
+            <circle cx="31" cy="57" r="1" fill="rgba(255,255,255,0.35)"/>
+            <defs><linearGradient id="sapS${size}" x1="29" y1="12" x2="35" y2="12">
+                <stop offset="0%" stop-color="#0a2351"/><stop offset="40%" stop-color="#0f52ba"/><stop offset="100%" stop-color="#0a2351"/>
+            </linearGradient></defs></svg>`,
+
+        diamond: `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="32" cy="11" rx="15" ry="7" fill="url(#diaH${size})" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+            <ellipse cx="32" cy="9.5" rx="12" ry="4.5" fill="rgba(200,240,255,0.35)"/>
+            <rect x="28.5" y="11" width="7" height="39" rx="1" fill="url(#diaS${size})"/>
+            <rect x="31" y="13" width="2" height="35" rx="0.5" fill="rgba(255,255,255,0.3)"/>
+            <path d="M29.5 20 L32 17 L34.5 20 L32 23 Z" fill="rgba(200,240,255,0.5)" stroke="rgba(255,255,255,0.3)" stroke-width="0.3"/>
+            <path d="M29.5 30 L32 27 L34.5 30 L32 33 Z" fill="rgba(200,240,255,0.5)" stroke="rgba(255,255,255,0.3)" stroke-width="0.3"/>
+            <path d="M29.5 40 L32 37 L34.5 40 L32 43 Z" fill="rgba(200,240,255,0.5)" stroke="rgba(255,255,255,0.3)" stroke-width="0.3"/>
+            <polygon points="28.5,50 35.5,50 34,55 30,55" fill="#87ceeb"/>
+            <polygon points="30,55 34,55 32,63" fill="#b9f2ff"/>
+            <polygon points="31,56 33,56 32,62" fill="rgba(255,255,255,0.4)"/>
+            <defs><linearGradient id="diaH${size}" x1="17" y1="4" x2="47" y2="18">
+                <stop offset="0%" stop-color="#87ceeb"/><stop offset="30%" stop-color="#b9f2ff"/><stop offset="50%" stop-color="#fff"/><stop offset="70%" stop-color="#b9f2ff"/><stop offset="100%" stop-color="#87ceeb"/>
+            </linearGradient><linearGradient id="diaS${size}" x1="28" y1="11" x2="36" y2="11">
+                <stop offset="0%" stop-color="#4fc3f7"/><stop offset="35%" stop-color="#b9f2ff"/><stop offset="50%" stop-color="#e0f7fa"/><stop offset="100%" stop-color="#4fc3f7"/>
+            </linearGradient></defs></svg>`,
+
+        rockdriller: `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="32" cy="12" rx="14" ry="7" fill="#ff6600" stroke="#993d00" stroke-width="1"/>
+            <ellipse cx="32" cy="10.5" rx="11" ry="4.5" fill="rgba(255,150,50,0.25)"/>
+            <rect x="28" y="12" width="8" height="18" rx="1" fill="#cc5500"/>
+            <rect x="29" y="30" width="6" height="12" rx="0.5" fill="#444"/>
+            <rect x="30" y="42" width="4" height="8" rx="0.3" fill="#333"/>
+            <polygon points="30,50 34,50 32,63" fill="#222"/>
+            <polygon points="31,51 33,51 32,61" fill="#555"/>
+            <rect x="28" y="18" width="8" height="2" rx="0.5" fill="#993d00"/>
+            <rect x="28" y="24" width="8" height="2" rx="0.5" fill="#993d00"/>
+            <line x1="30" y1="33" x2="34" y2="33" stroke="#666" stroke-width="0.5"/>
+            <line x1="30" y1="37" x2="34" y2="37" stroke="#666" stroke-width="0.5"/>
+            <rect x="30" y="13" width="4" height="16" rx="0.5" fill="rgba(255,150,50,0.2)"/>
+            </svg>`,
+
+        ghost: `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="32" cy="12" rx="14" ry="6.5" fill="rgba(180,130,255,0.5)" stroke="rgba(150,100,220,0.4)" stroke-width="0.8"/>
+            <ellipse cx="32" cy="10.5" rx="11" ry="4" fill="rgba(200,160,255,0.25)"/>
+            <rect x="29" y="12" width="6" height="40" rx="1" fill="rgba(150,100,220,0.4)"/>
+            <rect x="31" y="14" width="1.5" height="36" rx="0.5" fill="rgba(200,160,255,0.25)"/>
+            <polygon points="29,52 35,52 32,62" fill="rgba(120,80,200,0.4)"/>
+            <ellipse cx="32" cy="25" rx="5" ry="3" fill="none" stroke="rgba(200,160,255,0.15)" stroke-width="0.5"/>
+            <ellipse cx="32" cy="35" rx="6" ry="3.5" fill="none" stroke="rgba(200,160,255,0.12)" stroke-width="0.5"/>
+            <ellipse cx="32" cy="45" rx="7" ry="4" fill="none" stroke="rgba(200,160,255,0.08)" stroke-width="0.5"/>
+            <circle cx="30" cy="20" r="0.8" fill="rgba(255,255,255,0.3)"/>
+            <circle cx="34" cy="30" r="0.6" fill="rgba(255,255,255,0.2)"/>
+            <circle cx="31" cy="40" r="0.5" fill="rgba(255,255,255,0.15)"/>
+            </svg>`,
+
+        magnetic: `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="32" cy="12" rx="14" ry="6.5" fill="#0099cc" stroke="#006699" stroke-width="0.8"/>
+            <ellipse cx="32" cy="10.5" rx="11" ry="4" fill="rgba(0,200,255,0.25)"/>
+            <rect x="29" y="12" width="6" height="40" rx="1" fill="url(#magS${size})"/>
+            <rect x="31" y="14" width="1.5" height="36" rx="0.5" fill="rgba(0,200,255,0.25)"/>
+            <polygon points="29,52 35,52 32,62" fill="#006699"/>
+            <path d="M22 25 Q27 20 29 30" fill="none" stroke="rgba(0,200,255,0.3)" stroke-width="0.8"/>
+            <path d="M20 32 Q26 26 29 38" fill="none" stroke="rgba(0,200,255,0.2)" stroke-width="0.6"/>
+            <path d="M42 25 Q37 20 35 30" fill="none" stroke="rgba(0,200,255,0.3)" stroke-width="0.8"/>
+            <path d="M44 32 Q38 26 35 38" fill="none" stroke="rgba(0,200,255,0.2)" stroke-width="0.6"/>
+            <circle cx="32" cy="32" r="2" fill="rgba(0,255,255,0.3)"/>
+            <circle cx="32" cy="32" r="1" fill="rgba(255,255,255,0.4)"/>
+            <defs><linearGradient id="magS${size}" x1="29" y1="12" x2="35" y2="12">
+                <stop offset="0%" stop-color="#006699"/><stop offset="40%" stop-color="#00bfff"/><stop offset="100%" stop-color="#006699"/>
+            </linearGradient></defs></svg>`,
+
+        titan: `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="32" cy="10" rx="16" ry="7.5" fill="url(#titH${size})" stroke="#3d4f5f" stroke-width="1"/>
+            <ellipse cx="32" cy="8.5" rx="13" ry="5" fill="rgba(180,200,220,0.25)"/>
+            <circle cx="32" cy="10" r="4" fill="none" stroke="#3d4f5f" stroke-width="0.5"/>
+            <circle cx="32" cy="10" r="2" fill="rgba(180,200,220,0.2)"/>
+            <rect x="27.5" y="10" width="9" height="5" rx="0.5" fill="#5a6e7f"/>
+            <rect x="28.5" y="15" width="7" height="10" rx="0.5" fill="#4a5e6f"/>
+            <rect x="29" y="25" width="6" height="12" rx="0.5" fill="#3d4f5f"/>
+            <rect x="29.5" y="37" width="5" height="8" rx="0.5" fill="#354555"/>
+            <polygon points="29.5,45 34.5,45 33,52 31,52" fill="#2d3d4d"/>
+            <polygon points="31,52 33,52 32,63" fill="#3d4f5f"/>
+            <rect x="31" y="12" width="2" height="38" rx="0.5" fill="rgba(180,200,220,0.15)"/>
+            <line x1="28" y1="18" x2="36" y2="18" stroke="rgba(180,200,220,0.2)" stroke-width="0.5"/>
+            <line x1="29" y1="28" x2="35" y2="28" stroke="rgba(180,200,220,0.2)" stroke-width="0.5"/>
+            <line x1="29.5" y1="40" x2="34.5" y2="40" stroke="rgba(180,200,220,0.2)" stroke-width="0.5"/>
+            <defs><linearGradient id="titH${size}" x1="16" y1="3" x2="48" y2="17">
+                <stop offset="0%" stop-color="#3d4f5f"/><stop offset="30%" stop-color="#708090"/><stop offset="50%" stop-color="#8899aa"/><stop offset="70%" stop-color="#708090"/><stop offset="100%" stop-color="#3d4f5f"/>
+            </linearGradient></defs></svg>`
+    };
+
+    return nails[id] || nails.iron;
 }
 
 // ============ SHOP UI ============
