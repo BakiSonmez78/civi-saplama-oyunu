@@ -141,7 +141,7 @@ const NAIL_TYPES = [
 
 // Shop state persisted in localStorage
 let shopState = {
-    gold: 200, // start with 200 gold
+    gold: 50, // start with very little gold
     owned: ['iron'], // IDs of owned nails
     equipped: 'iron', // currently equipped nail ID
     selectedShopNail: null // currently selected in shop UI
@@ -1382,16 +1382,7 @@ function landNail() {
     // === TURN STEAL: close to enemy nail = bonus turn message ===
     const stole = checkTurnSteal(nail.x, nail.y, state.currentPlayer);
 
-    // === EARN GOLD for successful nail (only human player) ===
-    if (!aiMode || state.currentPlayer !== AI_PLAYER_IDX) {
-        let goldEarned = 10; // base per nail
-        const combo = getCombo(state.currentPlayer);
-        if (combo >= 5) goldEarned += 50;
-        else if (combo >= 3) goldEarned += 30;
-        else if (combo >= 2) goldEarned += 20;
-        if (hitCritical) goldEarned += 25;
-        addGold(goldEarned);
-    }
+
 
     // Build success message
     throwState.phase = 'idle';
@@ -2646,15 +2637,15 @@ function showWinScreen(result) {
     }
     winnerDesc.textContent = desc;
 
-    // === EARN GOLD for game result ===
+    // === EARN GOLD for game result (very limited) ===
     if (aiMode) {
         if (result.winner !== AI_PLAYER_IDX) {
-            addGold(200); // you won!
+            addGold(25); // win reward - small
         } else {
-            addGold(50); // you lost but still earn some
+            addGold(5); // lose consolation - tiny
         }
     } else {
-        addGold(100); // local multiplayer reward
+        addGold(15); // local multiplayer - small
     }
 
     const cc = $('confetti'); cc.innerHTML = '';
