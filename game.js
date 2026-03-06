@@ -61,77 +61,77 @@ const NAIL_TYPES = [
         bonuses: {}
     },
     {
-        id: 'bronze', name: 'Bronz Çivi', price: 100, rarity: 'common',
+        id: 'bronze', name: 'Bronz Çivi', price: 150, rarity: 'common',
         desc: 'Bronz alaşımlı çivi. Sert zeminlerde daha iyi tutar.',
         color: { head: '#cd7f32', shaft: '#b87333', tip: '#8c5e2a', shine: 'rgba(255,220,150,0.3)' },
         stats: { saplama: 55, menzil: 50, isabet: 50, hiz: 50, ozel: 15 },
         bonuses: { hardBonus: 0.15 }
     },
     {
-        id: 'steel', name: 'Çelik Çivi', price: 250, rarity: 'uncommon',
+        id: 'steel', name: 'Çelik Çivi', price: 500, rarity: 'uncommon',
         desc: 'Yüksek karbonlu çelik. Tüm zeminlerde güçlü.',
         color: { head: '#c0c0c0', shaft: '#a8a8a8', tip: '#808080', shine: 'rgba(255,255,255,0.35)' },
         stats: { saplama: 65, menzil: 55, isabet: 50, hiz: 50, ozel: 25 },
         bonuses: { allGroundBonus: 0.15 }
     },
     {
-        id: 'gold', name: 'Altın Çivi', price: 500, rarity: 'rare',
+        id: 'gold', name: 'Altın Çivi', price: 2000, rarity: 'rare',
         desc: 'Saf altın kaplama. Daha uzağa fırlatılabilir.',
         color: { head: '#ffd700', shaft: '#daa520', tip: '#b8860b', shine: 'rgba(255,255,200,0.4)' },
         stats: { saplama: 50, menzil: 75, isabet: 50, hiz: 50, ozel: 30 },
         bonuses: { rangeBonus: 0.25 }
     },
     {
-        id: 'ruby', name: 'Yakut Çivi', price: 400, rarity: 'rare',
+        id: 'ruby', name: 'Yakut Çivi', price: 1800, rarity: 'rare',
         desc: 'Yakut kristalli uç. Güç barı daha yavaş döner.',
         color: { head: '#e0115f', shaft: '#c41e3a', tip: '#8b0000', shine: 'rgba(255,100,100,0.3)' },
         stats: { saplama: 50, menzil: 50, isabet: 50, hiz: 70, ozel: 25 },
         bonuses: { powerSlowdown: 0.20 }
     },
     {
-        id: 'emerald', name: 'Zümrüt Çivi', price: 400, rarity: 'rare',
+        id: 'emerald', name: 'Zümrüt Çivi', price: 1800, rarity: 'rare',
         desc: 'Zümrüt kaplamalı. İsabet halkası daha yavaş.',
         color: { head: '#50c878', shaft: '#3cb371', tip: '#228b22', shine: 'rgba(100,255,150,0.3)' },
         stats: { saplama: 50, menzil: 50, isabet: 75, hiz: 50, ozel: 25 },
         bonuses: { accuracySlowdown: 0.25 }
     },
     {
-        id: 'sapphire', name: 'Safir Çivi', price: 400, rarity: 'rare',
+        id: 'sapphire', name: 'Safir Çivi', price: 1800, rarity: 'rare',
         desc: 'Safir taşlı. Daha güçlü saplama ve alan bonusu.',
         color: { head: '#0f52ba', shaft: '#1a3c7a', tip: '#0a2351', shine: 'rgba(100,150,255,0.3)' },
         stats: { saplama: 65, menzil: 60, isabet: 50, hiz: 50, ozel: 30 },
         bonuses: { powerBonus: 0.20 }
     },
     {
-        id: 'diamond', name: 'Elmas Çivi', price: 1000, rarity: 'legendary',
+        id: 'diamond', name: 'Elmas Çivi', price: 15000, rarity: 'legendary',
         desc: 'Efsanevi elmas çivi. Her zeminde neredeyse kesin saplanır!',
         color: { head: '#b9f2ff', shaft: '#87ceeb', tip: '#4fc3f7', shine: 'rgba(200,240,255,0.5)' },
         stats: { saplama: 95, menzil: 60, isabet: 60, hiz: 55, ozel: 90 },
         bonuses: { allGroundBonus: 0.50 }
     },
     {
-        id: 'rockdriller', name: 'Kaya Delici', price: 750, rarity: 'epic',
+        id: 'rockdriller', name: 'Kaya Delici', price: 5000, rarity: 'epic',
         desc: 'Tungsten uçlu. Kayalık zeminde bile saplanır!',
         color: { head: '#ff6600', shaft: '#cc5500', tip: '#333', shine: 'rgba(255,150,50,0.3)' },
         stats: { saplama: 70, menzil: 50, isabet: 45, hiz: 45, ozel: 80 },
         bonuses: { rockyBonus: 0.50 }
     },
     {
-        id: 'ghost', name: 'Hayalet Çivi', price: 800, rarity: 'epic',
+        id: 'ghost', name: 'Hayalet Çivi', price: 8000, rarity: 'epic',
         desc: 'Gizemli çivi. Engelleri 1 kez geçebilir!',
         color: { head: 'rgba(180,130,255,0.7)', shaft: 'rgba(150,100,220,0.6)', tip: 'rgba(120,80,200,0.5)', shine: 'rgba(200,160,255,0.4)' },
         stats: { saplama: 50, menzil: 55, isabet: 55, hiz: 60, ozel: 70 },
         bonuses: { pierceObstacle: true }
     },
     {
-        id: 'magnetic', name: 'Manyetik Çivi', price: 600, rarity: 'epic',
+        id: 'magnetic', name: 'Manyetik Çivi', price: 6000, rarity: 'epic',
         desc: 'Mıknatıslı uç. Hedefe doğru çekilir!',
         color: { head: '#00bfff', shaft: '#0099cc', tip: '#006699', shine: 'rgba(0,200,255,0.4)' },
         stats: { saplama: 50, menzil: 50, isabet: 70, hiz: 50, ozel: 55 },
         bonuses: { magnetPull: 0.15 }
     },
     {
-        id: 'titan', name: 'Titan Çivi', price: 1500, rarity: 'legendary',
+        id: 'titan', name: 'Titan Çivi', price: 25000, rarity: 'legendary',
         desc: 'Titan alaşımlı efsanevi çivi. Tüm bonuslar artırılmış!',
         color: { head: '#708090', shaft: '#5a6e7f', tip: '#3d4f5f', shine: 'rgba(180,200,220,0.4)' },
         stats: { saplama: 70, menzil: 60, isabet: 60, hiz: 60, ozel: 60 },
@@ -141,7 +141,7 @@ const NAIL_TYPES = [
 
 // Shop state persisted in localStorage
 let shopState = {
-    gold: 50, // start with very little gold
+    gold: 0, // start with nothing
     owned: ['iron'], // IDs of owned nails
     equipped: 'iron', // currently equipped nail ID
     selectedShopNail: null // currently selected in shop UI
@@ -2637,15 +2637,15 @@ function showWinScreen(result) {
     }
     winnerDesc.textContent = desc;
 
-    // === EARN GOLD for game result (very limited) ===
+    // === EARN GOLD for game result (extremely limited) ===
     if (aiMode) {
         if (result.winner !== AI_PLAYER_IDX) {
-            addGold(25); // win reward - small
+            addGold(3); // win reward - almost nothing
         } else {
-            addGold(5); // lose consolation - tiny
+            addGold(1); // lose consolation - symbolic
         }
     } else {
-        addGold(15); // local multiplayer - small
+        addGold(2); // local multiplayer - symbolic
     }
 
     const cc = $('confetti'); cc.innerHTML = '';
