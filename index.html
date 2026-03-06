@@ -19,7 +19,44 @@
     <div id="menu-screen" class="screen active">
         <div class="menu-container">
             <div class="title-section">
-                <div class="nail-icon">🔩</div>
+                <div class="nail-icon">
+                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Nail head (flat, round, seen from angle) -->
+                        <ellipse cx="32" cy="14" rx="14" ry="6" fill="url(#headGrad)" stroke="#555" stroke-width="1"/>
+                        <ellipse cx="32" cy="13" rx="11" ry="4" fill="url(#headShine)" opacity="0.5"/>
+                        <!-- Nail shaft -->
+                        <rect x="29" y="14" width="6" height="38" rx="1" fill="url(#shaftGrad)" stroke="#555" stroke-width="0.5"/>
+                        <!-- Shaft shine -->
+                        <rect x="30.5" y="16" width="2" height="34" rx="1" fill="rgba(255,255,255,0.2)"/>
+                        <!-- Nail tip -->
+                        <polygon points="29,52 35,52 32,62" fill="url(#tipGrad)"/>
+                        <!-- Gradients -->
+                        <defs>
+                            <linearGradient id="headGrad" x1="18" y1="8" x2="46" y2="20">
+                                <stop offset="0%" stop-color="#999"/>
+                                <stop offset="30%" stop-color="#ccc"/>
+                                <stop offset="50%" stop-color="#ddd"/>
+                                <stop offset="70%" stop-color="#bbb"/>
+                                <stop offset="100%" stop-color="#777"/>
+                            </linearGradient>
+                            <linearGradient id="headShine" x1="21" y1="9" x2="43" y2="17">
+                                <stop offset="0%" stop-color="#fff"/>
+                                <stop offset="100%" stop-color="transparent"/>
+                            </linearGradient>
+                            <linearGradient id="shaftGrad" x1="29" y1="14" x2="35" y2="14">
+                                <stop offset="0%" stop-color="#666"/>
+                                <stop offset="25%" stop-color="#aaa"/>
+                                <stop offset="50%" stop-color="#ccc"/>
+                                <stop offset="75%" stop-color="#999"/>
+                                <stop offset="100%" stop-color="#666"/>
+                            </linearGradient>
+                            <linearGradient id="tipGrad" x1="29" y1="52" x2="35" y2="62">
+                                <stop offset="0%" stop-color="#888"/>
+                                <stop offset="100%" stop-color="#555"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
                 <h1 class="game-title">Çivi Saplama</h1>
                 <p class="game-subtitle">Geleneksel Türk Çocuk Oyunu</p>
                 <div class="title-decoration"></div>

@@ -89,6 +89,8 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 /* ============================================
@@ -125,10 +127,13 @@ body {
             var(--mud-dark) 30%,
             var(--bg-medium) 60%,
             var(--mud-wet) 100%);
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     flex-direction: column;
     position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
 }
 
 #menu-screen::before {
@@ -154,6 +159,9 @@ body {
     max-width: 500px;
     width: 90%;
     padding: var(--space-2xl);
+    margin: auto;
+    padding-top: var(--space-lg);
+    padding-bottom: var(--space-xl);
 }
 
 /* Title */
@@ -175,10 +183,15 @@ body {
 }
 
 .nail-icon {
-    font-size: 3rem;
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-sm);
     animation: nailBounce 2s ease-in-out infinite;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+    line-height: 0;
+}
+
+.nail-icon svg {
+    width: 64px;
+    height: 64px;
 }
 
 @keyframes nailBounce {
@@ -980,13 +993,37 @@ body {
    RESPONSIVE
    ============================================ */
 
-@media (max-width: 600px) {
-    .game-title {
-        font-size: 2.2rem;
-    }
-
+/* Tablets and smaller screens */
+@media (max-width: 768px) {
     .menu-container {
         padding: var(--space-lg);
+        gap: var(--space-md);
+    }
+
+    .game-title {
+        font-size: 2.4rem;
+    }
+
+    .game-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .nail-icon svg {
+        width: 52px;
+        height: 52px;
+    }
+
+    .rules-preview {
+        padding: var(--space-md);
+    }
+
+    .rules-preview li {
+        font-size: 0.8rem;
+    }
+
+    .start-btn {
+        padding: var(--space-md) var(--space-lg);
+        font-size: 1rem;
     }
 
     .score-board {
@@ -995,7 +1032,7 @@ body {
 
     .score-item {
         padding: 2px var(--space-xs);
-        font-size: 0.65rem;
+        font-size: 0.7rem;
     }
 
     .turn-indicator {
@@ -1004,6 +1041,331 @@ body {
 
     #turn-text {
         font-size: 0.7rem;
+    }
+
+    .phase-indicator {
+        padding: 4px 10px;
+    }
+
+    .step-label {
+        font-size: 0.6rem;
+    }
+
+    .phase-connector {
+        width: 12px;
+    }
+
+    .zoom-controls {
+        bottom: 8px;
+        right: 8px;
+        padding: 3px 6px;
+    }
+
+    .zoom-btn {
+        width: 26px;
+        height: 26px;
+    }
+
+    .zoom-level {
+        font-size: 0.6rem;
+        min-width: 30px;
+    }
+
+    .modal-content {
+        padding: var(--space-lg);
+    }
+
+    .winner-text {
+        font-size: 1.3rem;
+    }
+
+    .trophy {
+        font-size: 3rem;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+    .menu-container {
+        padding: var(--space-md) var(--space-sm);
+        gap: var(--space-sm);
+        width: 95%;
+    }
+
+    .game-title {
+        font-size: 1.8rem;
+    }
+
+    .game-subtitle {
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+    }
+
+    .nail-icon {
+        margin-bottom: var(--space-xs);
+    }
+
+    .nail-icon svg {
+        width: 44px;
+        height: 44px;
+    }
+
+    .title-decoration {
+        margin-top: var(--space-sm);
+    }
+
+    .mode-select h2,
+    .player-select h2 {
+        font-size: 0.75rem;
+        margin-bottom: var(--space-sm);
+    }
+
+    .mode-btn {
+        padding: var(--space-sm) var(--space-xs);
+    }
+
+    .mode-icon {
+        font-size: 1.4rem;
+    }
+
+    .mode-label {
+        font-size: 0.65rem;
+    }
+
+    .player-btn {
+        padding: var(--space-sm) var(--space-xs);
+    }
+
+    .player-count {
+        font-size: 1.4rem;
+    }
+
+    .player-shape {
+        font-size: 0.6rem;
+    }
+
+    .rules-preview {
+        padding: var(--space-sm) var(--space-md);
+    }
+
+    .rules-preview h3 {
+        font-size: 0.8rem;
+        margin-bottom: var(--space-sm);
+    }
+
+    .rules-preview li {
+        font-size: 0.72rem;
+        line-height: 1.3;
+    }
+
+    .rules-preview ul {
+        gap: var(--space-xs);
+    }
+
+    .start-btn {
+        padding: var(--space-sm) var(--space-md);
+        font-size: 0.95rem;
+    }
+
+    .btn-icon {
+        font-size: 1.1rem;
+    }
+
+    /* Game screen mobile */
+    .game-header {
+        padding: var(--space-xs) var(--space-sm);
+        min-height: 42px;
+    }
+
+    .back-btn,
+    .reset-btn {
+        width: 30px;
+        height: 30px;
+    }
+
+    .score-item {
+        padding: 2px 4px;
+        font-size: 0.6rem;
+    }
+
+    .score-dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .turn-indicator {
+        padding: 2px var(--space-xs);
+    }
+
+    #turn-text {
+        font-size: 0.65rem;
+    }
+
+    .turn-dot {
+        width: 8px;
+        height: 8px;
+    }
+
+    .phase-indicator {
+        top: 6px;
+        padding: 3px 8px;
+    }
+
+    .phase-step {
+        padding: 2px 6px;
+        gap: 4px;
+    }
+
+    .step-num {
+        width: 18px;
+        height: 18px;
+        font-size: 0.6rem;
+    }
+
+    .step-label {
+        font-size: 0.55rem;
+        letter-spacing: 1px;
+    }
+
+    .phase-connector {
+        width: 8px;
+    }
+
+    .game-footer {
+        padding: var(--space-xs) var(--space-sm);
+    }
+
+    .instruction-text {
+        font-size: 0.7rem;
+    }
+
+    .instruction-icon {
+        font-size: 0.85rem;
+    }
+
+    .zoom-controls {
+        bottom: 6px;
+        right: 6px;
+        padding: 2px 4px;
+        gap: 2px;
+    }
+
+    .zoom-btn {
+        width: 24px;
+        height: 24px;
+    }
+
+    .zoom-level {
+        font-size: 0.55rem;
+        min-width: 26px;
+    }
+
+    .modal-content {
+        padding: var(--space-md);
+        border-radius: var(--radius-lg);
+    }
+
+    .trophy {
+        font-size: 2.5rem;
+        margin-bottom: var(--space-sm);
+    }
+
+    .winner-text {
+        font-size: 1.1rem;
+    }
+
+    .winner-desc {
+        font-size: 0.8rem;
+        margin-bottom: var(--space-md);
+    }
+
+    .modal-btn {
+        padding: var(--space-sm);
+        font-size: 0.8rem;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+    .menu-container {
+        padding: var(--space-sm) var(--space-xs);
+        gap: var(--space-xs);
+    }
+
+    .game-title {
+        font-size: 1.5rem;
+    }
+
+    .nail-icon svg {
+        width: 36px;
+        height: 36px;
+    }
+
+    .mode-icon {
+        font-size: 1.2rem;
+    }
+
+    .rules-preview li {
+        font-size: 0.65rem;
+    }
+
+    .start-btn {
+        font-size: 0.85rem;
+    }
+}
+
+/* Landscape mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .menu-container {
+        gap: var(--space-xs);
+        padding: var(--space-sm);
+    }
+
+    .nail-icon svg {
+        width: 36px;
+        height: 36px;
+    }
+
+    .game-title {
+        font-size: 1.6rem;
+    }
+
+    .game-subtitle {
+        font-size: 0.7rem;
+        margin-top: 2px;
+    }
+
+    .title-decoration {
+        margin-top: var(--space-xs);
+    }
+
+    .mode-btn, .player-btn {
+        padding: var(--space-xs) var(--space-xs);
+    }
+
+    .mode-select h2,
+    .player-select h2 {
+        margin-bottom: var(--space-xs);
+    }
+
+    .rules-preview {
+        padding: var(--space-sm);
+    }
+
+    .rules-preview h3 {
+        margin-bottom: var(--space-xs);
+    }
+
+    .rules-preview ul {
+        gap: 2px;
+    }
+
+    .rules-preview li {
+        font-size: 0.7rem;
+    }
+
+    .start-btn {
+        padding: var(--space-sm);
     }
 }
 
